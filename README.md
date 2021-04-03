@@ -75,6 +75,7 @@ Remove an entire stack configured in `serverless.yml` via CloudFormation.
 ## Task 2 URLs
 2.1:
 **Manual Deployment**
+
 S3 bucket link: https://manually-deployed-shop-app-bucket.s3.us-east-1.amazonaws.com/index.html
 CloudFront link: https://d2geo8nc8qdn1o.cloudfront.net
 
