@@ -56,9 +56,13 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
         console.log("Error response:", error.response);
         const status = error.response.status;
         if (status === 401) {
-          alert("Unauthorized: Invalid or missing authentication credentials");
+          alert(
+            "Unauthorized (401): Invalid or missing authentication credentials"
+          );
         } else if (status === 403) {
-          alert("Forbidden: You don't have permission to access this resource");
+          alert(
+            "Forbidden (403): You don't have permission to access this resource"
+          );
         } else {
           console.error("Upload error:", error);
         }
