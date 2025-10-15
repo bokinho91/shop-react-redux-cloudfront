@@ -29,26 +29,43 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
     // Get the presigned URL
 
     if (!file) return;
-    const response = await axios({
-      method: "GET",
-      url,
-      params: {
-        name: encodeURIComponent(file?.name),
-      },
-      headers: {
-        Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
-      },
-    });
-    console.log("Presigned URL: ", response.data);
-    console.log("File to upload: ", file?.name);
-    console.log("Uploading to: ", response.data);
-    const result = await fetch(response.data.url, {
-      method: "PUT",
-      body: file,
-      headers: { "Content-Type": "text/csv" },
-    });
-    console.log("Result: ", result);
-    setFile(undefined);
+
+    try {
+      const response = await axios({
+        method: "GET",
+        url,
+        params: {
+          name: encodeURIComponent(file?.name),
+        },
+        headers: {
+          Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
+        },
+      });
+      console.log("Presigned URL: ", response.data);
+      console.log("File to upload: ", file?.name);
+      console.log("Uploading to: ", response.data);
+      const result = await fetch(response.data.url, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": "text/csv" },
+      });
+      console.log("Result: ", result);
+      setFile(undefined);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Error response:", error.response);
+        const status = error.response.status;
+        if (status === 401) {
+          alert("Unauthorized: Invalid or missing authentication credentials");
+        } else if (status === 403) {
+          alert("Forbidden: You don't have permission to access this resource");
+        } else {
+          console.error("Upload error:", error);
+        }
+      } else {
+        console.error("Upload error:", error);
+      }
+    }
   };
   return (
     <Box>
